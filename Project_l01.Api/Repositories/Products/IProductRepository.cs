@@ -8,4 +8,6 @@ public interface IProductRepository
     Task UpdateAsync(Product product);
     Task DeleteAsync(Product product);
     Task<bool> CategoryExistAsync(int categoryId);
+
+    IQueryable<Product> GetQueryable();
 }

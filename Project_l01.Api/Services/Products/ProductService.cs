@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Project_l01.Api.DTOs.Common;
 using Project_l01.Api.DTOs.Products;
 using Project_l01.Api.Models;
 
@@ -97,6 +99,75 @@ public class ProductService : IProductService
         await _productRepository.DeleteAsync(product);
 
         return true;
+    }
+
+
+    public async Task<PagedResult<ProductDto>> GetPagedAsync(ProductQueryParameters parameters)
+    {
+        var query = _productRepository.GetQueryable();
+
+        if (!string.IsNullOrWhiteSpace(parameters.Search))
+        {
+            query = query.Where(product => product.Name.Contains(parameters.Search));
+        }
+
+        if (parameters.CategoryId.HasValue)
+        {
+            query = query.Where(product => product.CategoryId == parameters.CategoryId.Value);
+        }
+
+        if (parameters.MinPrice.HasValue)
+        {
+            query = query.Where(product => product.Price >= parameters.MinPrice.Value);
+        }
+
+        if (parameters.MaxPrice.HasValue)
+        {
+            query = query.Where(product => product.Price <= parameters.MaxPrice.Value);
+        }
+
+        if (parameters.LowStock == true)
+        {
+            query = query.Where(product => product.StockQuantity < 10);
+        }
+
+        if(!string.IsNullOrWhiteSpace(parameters.SortBy))
+        {
+            var sortDirection = parameters.SortDirection?.ToLower();
+
+            query = parameters.SortBy.ToLower() switch
+            {
+                "name" => sortDirection == "desc"
+                    ? query.OrderByDescending(product => product.Name)
+                    : query.OrderBy(product => product.Name),
+
+                "price" => sortDirection == "desc"
+                    ? query.OrderByDescending(product => product.Price)
+                    : query.OrderBy(product => product.Price),
+
+                "stock" => sortDirection == "desc"
+                    ? query.OrderByDescending(product => product.StockQuantity)
+                    : query.OrderBy(product => product.StockQuantity),
+
+                _ => query
+            };
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var products = await query
+            .Skip((parameters.Page - 1) * parameters.PageSize)
+            .Take(parameters.PageSize)
+            .ToListAsync();
+
+        return new PagedResult<ProductDto>
+        {
+            Items = products.Select(MapToDto).ToList(),
+            TotalCount = totalCount,
+            Page = parameters.Page,
+            PageSize = parameters.PageSize,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)parameters.PageSize)
+        };
     }
 
     private static ProductDto MapToDto(Product product)

@@ -54,5 +54,9 @@ public class ProductRepository : IProductRepository
             .AnyAsync(category => category.Id == categoryId);
     }
 
-
+    public IQueryable<Product> GetQueryable()
+    {
+        return _context.Products
+            .Include(product => product.Category);
+    }
 }

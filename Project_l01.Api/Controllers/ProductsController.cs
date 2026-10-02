@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using Project_l01.Api.DTOs.Categories;
+using Project_l01.Api.DTOs.Common;
 using Project_l01.Api.DTOs.Products;
 using Project_l01.Api.Services;
 
@@ -19,11 +20,11 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAll()
+    public async Task<ActionResult<PagedResult<ProductDto>>> GetProducts([FromQuery] ProductQueryParameters parameters)
     {
-        var products = await _productService.GetAllAsync();
+        var result = await _productService.GetPagedAsync(parameters);
 
-        return Ok(products);
+        return Ok(result);
     }
 
     [HttpGet("{id:int}")]
@@ -38,6 +39,10 @@ public class ProductsController : ControllerBase
 
         return Ok(product);
     }
+
+
+    
+    
 
     [HttpPost]
     public async Task<ActionResult<ProductDto>> Create(CreateProductDto dto)
@@ -76,4 +81,5 @@ public class ProductsController : ControllerBase
 
         return NoContent();
     }
+
 }
