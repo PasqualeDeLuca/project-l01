@@ -10,6 +10,99 @@
   <p>{{ errorMessage() }}</p>
 }
 
+<div class="filters">
+  <div class="filter">
+    <label for="search">Search</label>
+
+    <input
+      id="search"
+      type="text"
+      [value]="search()"
+      (input)="search.set($any($event.target).value)"
+      placeholder="Search Products..."
+    />
+  </div>
+
+  <div class="filter">
+    <label for="minPrice">Min price</label>
+    <input
+      id="minPrice"
+      type="number"
+      [value]="minPrice() ?? ''"
+      (input)="setMinPrice($any($event.target).value)"
+      min="0"
+      step="0.01"
+    />
+
+    <label for="maxPrice">Max price</label>
+    <input
+      id="maxPrice"
+      type="number"
+      [value]="minPrice() ?? ''"
+      (input)="setMaxPrice($any($event.target).value)"
+      min="0"
+      step="0.01"
+    />
+  </div>
+
+  <div class="filter">
+    <label for="category">Category</label>
+
+    <select
+      id="category"
+      [value]="categoryId() ?? ''"
+      (change)="setCategoryId($any($event.target).value)"
+    >
+      <option value="">All categories</option>
+
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">
+          {{ category.name }}
+        </option>
+      }
+    </select>
+  </div>
+
+  <div class="filter">
+    <label>
+      <input
+        type="checkbox"
+        [checked]="lowStock()"
+        (change)="lowStock.set($any($event.target).checked)"
+      />
+      Only low stock
+    </label>
+  </div>
+
+  <div class="filter">
+    <label for="sortBy">Sort by</label>
+
+    <select id="sortBy" [value]="sortBy()" (change)="setSortBy($any($event.target).value)">
+      <option value="">Default</option>
+      <option value="name">Name</option>
+      <option value="price">Price</option>
+      <option value="stock">Stock</option>
+    </select>
+  </div>
+
+  <div class="filter">
+    <label for="sortDirection">Direction</label>
+
+    <select
+      id="sortDirection"
+      [value]="sortDirection()"
+      (change)="setSortDirection($any($event.target).value)"
+    >
+      <option value="">Default</option>
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+  </div>
+
+  <button type="button" (click)="applyFilters()">Search</button>
+  <button type="button" (click)="resetFilters()">Reset</button>
+</div>
+
 @for (product of products(); track product.id) {
   <article>
     <h2>{{ product.name }}</h2>
@@ -34,4 +127,18 @@
       }
     </button>
   </article>
+}
+
+@if (totalPages() > 1) {
+  <div class="pagination">
+    <button type="button" , (click)="previousPage()" [disabled]="currentPage() === 1">
+      Previous
+    </button>
+
+    <span> Page {{ currentPage() }} of {{ totalPages() }} </span>
+
+    <button type="button" , (click)="nextPage()" [disabled]="currentPage() === totalPages()">
+      Next
+    </button>
+  </div>
 }

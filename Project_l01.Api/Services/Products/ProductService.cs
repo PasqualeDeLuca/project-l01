@@ -15,7 +15,6 @@ public class ProductService : IProductService
         _productRepository = productRepository;
     }
 
-
     public async Task<IEnumerable<ProductDto>> GetAllAsync()
     {
         var products = await _productRepository.GetAllAsync();
