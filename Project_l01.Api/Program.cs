@@ -4,7 +4,6 @@ using Project_l01.Api.Data;
 using Project_l01.Api.Products;
 using Project_l01.Api.Repositories;
 using Project_l01.Api.Services;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options
         .UseNpgsql(
             builder.Configuration.GetConnectionString("DefaultConnection")
-        )
+        ) 
 );
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -32,6 +31,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 
 builder.Services.AddEndpointsApiExplorer();
