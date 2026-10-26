@@ -6,6 +6,7 @@ import { ProductCreate } from './components/products/product-create/product-crea
 import { ProductEdit } from './components/products/product-edit/product-edit';
 import { Orders } from './components/orders/orders/orders';
 import { OrderDetail } from './components/orders/order-detail/order-detail';
+import { Customers } from './components/customers/customers/customers';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,10 @@ export const routes: Routes = [
   },
   {
     path: 'orders/:id',
-    component: OrderDetail
-  }
+    component: OrderDetail,
+  },
+  {
+    path: 'customers',
+    component: Customers,
+  },
 ];

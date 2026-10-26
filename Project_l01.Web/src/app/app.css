@@ -1,0 +1,10 @@
+.nav-bar {
+  width: 100%;
+
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  padding: 2rem;
+
+  gap: 2rem;
+}
