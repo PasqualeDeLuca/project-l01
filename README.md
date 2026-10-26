@@ -158,31 +158,31 @@ The database runs inside a Docker container, making the development environment 
 The current repository structure is:
 
 ```text
-Project_l01/
+project-l01/
 │
 ├── .gitignore
 ├── docker-compose.yml
-├── Project_l01.slnx
+├── project-l01.slnx
 │
-└── Project_l01.Api/
+└── project-l01.api/
     │
     ├── Data/
     │
     ├── Properties/
     │
-    ├── Project_l01.Api.csproj
+    ├── project-l01.api.csproj
     ├── Program.cs
-    ├── Project_l01.Api.http
+    ├── project-l01.api.http
     ├── appsettings.json
     └── appsettings.Development.json
 ```
 
-The repository root represents the overall solution, while `Project_l01.Api` contains the ASP.NET Core API project.
+The repository root represents the overall solution, while `project-l01.api` contains the ASP.NET Core API project.
 
 As the application grows, additional folders will be introduced to separate responsibilities such as:
 
 ```text
-Project_l01.Api/
+project-l01.api/
 │
 ├── Controllers/
 ├── Data/
@@ -493,7 +493,7 @@ Make sure the following tools are installed:
 
 ```bash
 git clone <repository-url>
-cd Project_l01
+cd project-l01
 ```
 
 ### 2. Start PostgreSQL
@@ -511,13 +511,13 @@ dotnet restore
 ### 4. Apply database migrations
 
 ```bash
-dotnet ef database update --project Project_l01.Api
+dotnet ef database update --project project-l01.api
 ```
 
 ### 5. Start the API
 
 ```bash
-dotnet run --project Project_l01.Api
+dotnet run --project project-l01.api
 ```
 
 The API will be available on the development URL displayed by ASP.NET Core.

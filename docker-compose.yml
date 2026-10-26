@@ -1,3 +1,5 @@
+name: project_l01
+
 services:
   postgres:
     image: postgres:17
