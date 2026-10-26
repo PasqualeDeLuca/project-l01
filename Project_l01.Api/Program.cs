@@ -58,7 +58,10 @@ if (app.Environment.IsDevelopment())
     app.UseCors("Angular");
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.MapControllers();
 

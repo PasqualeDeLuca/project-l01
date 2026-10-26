@@ -33,7 +33,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .IsRequired();
 
         builder.HasOne(order => order.Customer)
-            .WithMany()
+            .WithMany(customer => customer.Orders)
             .HasForeignKey(order => order.CustomerId)
             .OnDelete(DeleteBehavior.Restrict);
 

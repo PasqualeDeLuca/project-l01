@@ -130,27 +130,30 @@ public class ProductService : IProductService
             query = query.Where(product => product.StockQuantity < 10);
         }
 
-        if(!string.IsNullOrWhiteSpace(parameters.SortBy))
+        var sortDirection = parameters.SortDirection?.ToLower();
+
+        query = parameters.SortBy?.ToLower() switch
         {
-            var sortDirection = parameters.SortDirection?.ToLower();
+            "name" => sortDirection == "desc"
+                ? query.OrderByDescending(product => product.Name)
+                    .ThenBy(product => product.Id)
+                : query.OrderBy(product => product.Name)
+                    .ThenBy(product => product.Id),
 
-            query = parameters.SortBy.ToLower() switch
-            {
-                "name" => sortDirection == "desc"
-                    ? query.OrderByDescending(product => product.Name)
-                    : query.OrderBy(product => product.Name),
+            "price" => sortDirection == "desc"
+                ? query.OrderByDescending(product => product.Price)
+                    .ThenBy(product => product.Id)
+                : query.OrderBy(product => product.Price)
+                    .ThenBy(product => product.Id),
 
-                "price" => sortDirection == "desc"
-                    ? query.OrderByDescending(product => product.Price)
-                    : query.OrderBy(product => product.Price),
+            "stock" => sortDirection == "desc"
+                ? query.OrderByDescending(product => product.StockQuantity)
+                    .ThenBy(product => product.Id)
+                : query.OrderBy(product => product.StockQuantity)
+                    .ThenBy(product => product.Id),
 
-                "stock" => sortDirection == "desc"
-                    ? query.OrderByDescending(product => product.StockQuantity)
-                    : query.OrderBy(product => product.StockQuantity),
-
-                _ => query
-            };
-        }
+            _ => query.OrderBy(product => product.Id)
+        };
 
         var totalCount = await query.CountAsync();
 
